@@ -47,9 +47,10 @@ public class BallShooter : MonoBehaviour
         ActiveBallCounter = 0;
         foreach (GameObject ball in Balls)
         {
-            ball.transform.position = StartPos + direction * 0.35f;
+            ball.transform.position = StartPos + direction * 0.15f;
             ball.SetActive(true);
-            ball.GetComponent<Rigidbody2D>().gravityScale = 0.01f;
+            ball.GetComponent<Collider2D>().enabled = true;
+            ball.GetComponent<Rigidbody2D>().gravityScale = 0.003f;
             ball.GetComponent<Rigidbody2D>().AddForce(direction * InitialForce);
             ActiveBallCounter++;
             yield return new WaitForSeconds(0.1f);
@@ -69,7 +70,10 @@ public class BallShooter : MonoBehaviour
 
     private IEnumerator CollectBallRoutine(GameObject _gameObject, Vector3 pos)
     {
-        while (Vector3.Distance(_gameObject.transform.position, pos) > 0.1f)
+        _gameObject.GetComponent<Rigidbody2D>().gravityScale = 0.00f;
+        _gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        _gameObject.GetComponent<Collider2D>().enabled = false;
+        while (Vector3.Distance(_gameObject.transform.position, pos) > 0.01f)
         {
             _gameObject.transform.position = Vector3.Lerp(_gameObject.transform.position, pos, 10.0f*Time.deltaTime);
             yield return null;
@@ -77,11 +81,13 @@ public class BallShooter : MonoBehaviour
         _gameObject.transform.position = pos;
         
         _gameObject.SetActive(false);
+        _gameObject.name = _gameObject.name + " cd";
         BallInstance.SetActive(true);
         ActiveBallCounter--;
         if (ActiveBallCounter == 0)
         {
             ActiveTurn = true;
+            GameSpeedController.SpeedReset();
         }
         yield return null;
     }
@@ -98,16 +104,15 @@ public class BallShooter : MonoBehaviour
     {
         foreach (GameObject ball in Balls)
         {
-            if (ball.activeSelf == true)
+            if (ball.activeSelf == true && ball.GetComponent<Rigidbody2D>().velocity != Vector2.zero)
             {
-                ball.GetComponent<Rigidbody2D>().gravityScale = 0.00f;
-                ball.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, 0.0f);
                 StartCoroutine(CollectBallRoutine(ball, pos));
             }
-            yield return new WaitForSeconds(0.01f);
         }
-        ActiveBallCounter = 0;
-        ActiveTurn = true;
+        yield return new WaitForSeconds(1.0f);
+        Debug.Log(ActiveBallCounter);
+        Debug.Assert(ActiveBallCounter == 0);
+        Debug.Assert(ActiveTurn == true);
         bCollectingBalls = false;
     }
 
@@ -126,11 +131,12 @@ public class BallShooter : MonoBehaviour
             Vector3 direction = Vector3.Normalize(mouseWorldPosition - StartPos);
             BallShootingDirection.SetActive(true);
             BallShootingDirection.transform.position = StartPos;
+            BallShootingDirection.GetComponent<ShootingDirection>().Direction = direction;
             Quaternion q = Quaternion.LookRotation(new Vector3(0.0f, 0.0f, 1.0f), direction);
             float fZAngle = q.eulerAngles.z;
-            if (fZAngle < 85.0f || fZAngle > 275.0f)
+            if (fZAngle < 87.0f || fZAngle > 273.0f)
             {
-                BallShootingDirection.transform.rotation = q;
+               // BallShootingDirection.transform.rotation = q;
                 ShootingDirection = direction;
             }
         }
@@ -147,4 +153,5 @@ public class BallShooter : MonoBehaviour
     {
 
     }
+
 }

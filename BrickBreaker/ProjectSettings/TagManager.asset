@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ball
+  - LeftWall
+  - RightWall
+  - TopWall
   layers:
   - Default
   - TransparentFX
@@ -15,10 +18,10 @@ TagManager:
   - Brick
   - Brick Text
   - Ball
-  - GameScreen
-  - OptionsScreen
-  - PauseMenuScreen
-  - MainMenuScreen
+  - Walls
+  - 
+  - 
+  - 
   - 
   - 
   - 

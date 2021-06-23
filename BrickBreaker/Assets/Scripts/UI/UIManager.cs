@@ -23,14 +23,14 @@ public class UIManager : MonoBehaviour
         listScreens.Add(PauseMenuScreen);
         listScreens.Add(LevelSelectMenuScreen);
         listScreens.Add(GameScreenScreen);
-
-        EnableMainMenuScreen();
     }
 
     async public void OnEnable()
     {
+        EnableMainMenuScreen();
         await System.Threading.Tasks.Task.Delay(100);
         options.InitVolumes();
+
     }
 
     private void DisableAllScreen()
@@ -45,6 +45,13 @@ public class UIManager : MonoBehaviour
     {
         DisableAllScreen();
         MainMenuScreen.SetActive(true);
+        Game.gameObject.SetActive(false);
+    }
+
+    public void EnableLevelSelectionMenuScreen()
+    {
+        DisableAllScreen();
+        LevelSelectMenuScreen.SetActive(true);
     }
 
     public void EnableOptionsMenuScreen()

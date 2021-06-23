@@ -25,12 +25,14 @@ public class Brick : MonoBehaviour
     {
         if(collision.collider.tag.CompareTo("Ball") == 0)
         {
+            collision.collider.gameObject.GetComponent<AudioSource>().Play();
             HitCount--;
             updater.DoUpdate(HitCount);
             if (HitCount == 0)
             {
                 Destroy(transform.parent.gameObject);
             }
+            GameSpeedController.OnCollision();
         }
     }
 }
