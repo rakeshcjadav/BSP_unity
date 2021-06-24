@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1002e568d18a29644ab7012d691cdd91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Count: 60
+  Count: 30
   BallPrefab: {fileID: 3414632744178307000, guid: 75e8509fccef8454b965616605031408, type: 3}
   Direction: {x: 0, y: 0, z: 0}
   LeftWall: {fileID: 0}
