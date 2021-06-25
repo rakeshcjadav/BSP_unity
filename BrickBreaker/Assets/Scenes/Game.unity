@@ -7421,7 +7421,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab_Brick: {fileID: 410264485060262253, guid: 4294a7cba5780f14aab6be822e043892, type: 3}
-  BrickScale: 0.5
+  BrickScale: 0.4
+  Size: {x: 11, y: 11}
 --- !u!1 &1927316478
 GameObject:
   m_ObjectHideFlags: 0
