@@ -9,10 +9,10 @@ public class BallShooter : MonoBehaviour
     public static UnityAction OnStartShooting;
     public static UnityAction OnBallShoot;
 
-    public float InitialForce = 10.0f;
+    public float InitialForce = 1.0f;
+    public int BallCount = 1;
     public GameObject Prefab_Ball;
     public GameObject Prefab_BallShootingDirection;
-    public int BallCount = 10;
 
     public GameObject BallStartPos;
     public GameObject BallEndPos;
@@ -23,14 +23,16 @@ public class BallShooter : MonoBehaviour
     private bool bCollectingBalls = false;
     private Vector3 ShootingDirection = Vector3.up;
 
-    private BallsBucket bucket = new BallsBucket();
+    private BallsBucket bucket;
 
     private void Awake()
     {
         BallCollector.OnFirstBallHitCollector += FirstBallReached;
         BallCollector.OnBallHitCollector += CollectBall;
-        Ball.OnBallCollected += OnBallCollected;
+        BallsBucket.OnBasketFull += BasketFull;
         BallsBucket.OnAllBallsCollected += OnAllBallsCollected;
+
+        bucket = new BallsBucket(BallCount);
     }
     void Start()
     {
@@ -40,6 +42,7 @@ public class BallShooter : MonoBehaviour
         BallShootingDirection = Instantiate(Prefab_BallShootingDirection, transform);
         BallShootingDirection.SetActive(false);
 
+        
         bucket.FillBucket(Prefab_Ball, transform);
     }
 
@@ -68,17 +71,14 @@ public class BallShooter : MonoBehaviour
         _gameObject.GetComponent<Ball>().ReturnToBasket(BallEndPos.transform.position);
     }
 
-    public void OnBallCollected()
+    public void BasketFull()
     {
-        if (bucket.IsFull)
-        {
-            BallStartPos.transform.position = BallEndPos.transform.position;
-            BallStartPos.SetActive(true);
-            BallEndPos.SetActive(false);
-            ActiveTurn = true;
-            bCollectingBalls = false;
-            GameSpeedController.SpeedReset();
-        }
+        BallStartPos.transform.position = BallEndPos.transform.position;
+        BallStartPos.SetActive(true);
+        BallEndPos.SetActive(false);
+        ActiveTurn = true;
+        bCollectingBalls = false;
+        GameSpeedController.SpeedReset();
     }
 
     public void CollectAllBalls()
@@ -120,11 +120,11 @@ public class BallShooter : MonoBehaviour
             Vector3 direction = Vector3.Normalize(mouseWorldPosition - BallStartPos.transform.position);
             BallShootingDirection.SetActive(true);
             BallShootingDirection.transform.position = BallStartPos.transform.position;
-            BallShootingDirection.GetComponent<ShootingDirection>().Direction = direction;
             Quaternion q = Quaternion.LookRotation(new Vector3(0.0f, 0.0f, 1.0f), direction);
             float fZAngle = q.eulerAngles.z;
             if (fZAngle < 87.0f || fZAngle > 273.0f)
             {
+                BallShootingDirection.GetComponent<ShootingDirection>().Direction = direction;
                 ShootingDirection = direction;
             }
         }

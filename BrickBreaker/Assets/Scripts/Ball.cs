@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Ball : MonoBehaviour
 {
-    public static UnityAction OnBallCollected;
+    public static UnityAction OnBallReturnedToBasket;
 
     public bool Active {
         get {
@@ -68,10 +68,10 @@ public class Ball : MonoBehaviour
         rigidBody2D.velocity = Vector2.zero;
         circleCollider2D.enabled = false;
         if(activeCoroutine == null)
-            activeCoroutine = StartCoroutine(CollectBallPrivate(pos));
+            activeCoroutine = StartCoroutine(ReturnToBasketPrivate(pos));
     }
 
-    private IEnumerator CollectBallPrivate(Vector3 pos)
+    private IEnumerator ReturnToBasketPrivate(Vector3 pos)
     {
         while (Vector3.Distance(transform.position, pos) > 0.01f)
         {
@@ -80,7 +80,7 @@ public class Ball : MonoBehaviour
         }
         transform.position = pos;
         gameObject.SetActive(false);
-        OnBallCollected?.Invoke();
+        OnBallReturnedToBasket?.Invoke();
         yield return null;
     }
 }

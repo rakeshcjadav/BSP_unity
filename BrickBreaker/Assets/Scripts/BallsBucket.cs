@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class BallsBucket
 {
-    public int Capacity = 20;
+    public int Capacity = 1;
     public List<GameObject> Balls = new List<GameObject>();
     private int RemainingBallsInBasket;
 
@@ -13,11 +13,12 @@ public class BallsBucket
     public static UnityAction OnFirstBallFired;
     public static UnityAction OnFirstBallCollected;
     public static UnityAction OnAllBallsCollected;
+    public static UnityAction OnBasketFull;
 
     public int BallsInBasket
     {
-        get { return BallsInBasket; }
-        set { BallsInBasket = value;  }
+        get { return RemainingBallsInBasket; }
+        private set { }
     }
 
     public bool IsEmpty
@@ -32,11 +33,12 @@ public class BallsBucket
         private set { }
     }
 
-    public BallsBucket()
+    public BallsBucket(int capacity)
     {
+        Capacity = capacity;
         RemainingBallsInBasket = Capacity;
         BallShooter.OnBallShoot += OnBallFired;
-        Ball.OnBallCollected += OnBallCollected;
+        Ball.OnBallReturnedToBasket += BallReturnedToBasket;
     }
 
     public void FillBucket(GameObject prefab, Transform transform)
@@ -71,9 +73,11 @@ public class BallsBucket
         OnBallNumberUpdate?.Invoke(RemainingBallsInBasket);
     }
 
-    public void OnBallCollected()
+    public void BallReturnedToBasket()
     {
         RemainingBallsInBasket++;
         OnBallNumberUpdate?.Invoke(RemainingBallsInBasket);
+        if (RemainingBallsInBasket == Capacity)
+            OnBasketFull?.Invoke();
     }
 }

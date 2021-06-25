@@ -7,18 +7,11 @@ public class Brick : MonoBehaviour
     public int HitCount;
     public Updater updater;
 
-    // Start is called before the first frame update
     void Start()
     {
-        HitCount = Random.Range(0, 6) + 4;
+        HitCount = Random.Range(0, 89) + 2;
         updater = transform.parent.GetComponentInChildren<Updater>();
         updater.DoUpdate(HitCount);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
