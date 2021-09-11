@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public GameObject PauseMenuScreen;
     public GameObject LevelSelectMenuScreen;
     public GameObject GameScreenScreen;
+    public GameObject BannerAd;
 
     public Game Game;
 
@@ -39,6 +40,7 @@ public class UIManager : MonoBehaviour
         {
             go.SetActive(false);
         }
+        BannerAd.SetActive(false);
     }
 
     public void EnableMainMenuScreen()
@@ -74,18 +76,13 @@ public class UIManager : MonoBehaviour
         PauseMenuScreen.SetActive(false);
     }
 
-    public void EnableLevelSelectMenuScreen()
-    {
-        DisableAllScreen();
-        LevelSelectMenuScreen.SetActive(true);
-    }
-
     public void EnableGameScreenScreen()
     {
         DisableAllScreen();
         GameScreenScreen.SetActive(true);
         Game.gameObject.SetActive(true);
         Game.StartGame();
+        BannerAd.SetActive(true);
     }
 
     public void Exit()

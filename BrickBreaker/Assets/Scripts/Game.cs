@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class Game : MonoBehaviour
 {
     private float PreviousTimeScale = 1.0f;
     private float _gameSpeed;
+    private int GamePausedCount = 0;
     private float GameSpeed {
         get
         {
@@ -24,6 +26,11 @@ public class Game : MonoBehaviour
         {
             PreviousTimeScale = Time.timeScale;
             Time.timeScale = 0.0f;
+            /*GamePausedCount++;
+            Analytics.CustomEvent("brickbreaker_game_paused", new Dictionary<string, object>
+            {
+                { "Game_Paused", GamePausedCount },
+            });*/
         }
     }
 
@@ -35,6 +42,11 @@ public class Game : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1.0f;
+        /*
+        Analytics.CustomEvent("brickbreaker_game_start", new Dictionary<string, object>
+        {
+        });
+        */
     }
 
     public void IncreaseGameSpeed()
